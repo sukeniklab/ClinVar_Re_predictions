@@ -22,7 +22,7 @@ mpl.rcParams['font.size'] = 20
 #%%
 compact = pd.read_csv('gProfiler_hsapiens_11-7-2024_compact.csv',
                       comment='#',)
-for source in ['GO:MF','GO:CC']:
+for source in ['GO:MF']:#,'GO:CC']:
     sliced = compact[(compact['source']==source)&(compact['term_size']>100)&(compact['FC']>1.1)&(compact['term_name'].str.len()<35)]
     fig = plt.figure(figsize=[5,5])
     h = [Size.Fixed(0), Size.Fixed(2)]
@@ -34,9 +34,10 @@ for source in ['GO:MF','GO:CC']:
     g = sns.scatterplot(x='FC',y='term_name',data=sliced,hue='negative_log10_of_adjusted_p_value',
                size='term_size',sizes=(150,800),palette='Reds',
                legend='brief',edgecolor='k',
-               hue_norm=(-7,30),ax=ax)
+               hue_norm=(3,11),ax=ax)
     g.legend(bbox_to_anchor=(1.2,1))
-    plt.savefig(source+'.svg')
+    ax.set_xlim(1,2)
+    plt.savefig('GO_MF.svg')
 #%% 
 for source in ['GO:BP']:
     sliced = compact[(compact['source']==source)&(compact['term_size']>500)&(compact['FC']>1.4)&(compact['term_name'].str.len()<35)]

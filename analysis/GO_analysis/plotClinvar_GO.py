@@ -20,10 +20,11 @@ mpl.rcParams['xtick.major.width'] = 3
 mpl.rcParams['font.size'] = 20
 
 #%%
-compact = pd.read_csv('gProfiler_hsapiens_11-7-2024_compact.csv',
+compact = pd.read_csv('gProfiler_hsapiens_12-23-2024_compact.csv',
                       comment='#',)
+compact['FC']=compact['intersection_size']/compact['query_size']/(compact['term_size']/compact['effective_domain_size'])
 for source in ['GO:MF']:#,'GO:CC']:
-    sliced = compact[(compact['source']==source)&(compact['term_size']>100)&(compact['FC']>1.1)&(compact['term_name'].str.len()<35)]
+    sliced = compact[(compact['source']==source)&(compact['term_size']>50)&(compact['FC']>1.1)&(compact['term_name'].str.len()<35)]
     fig = plt.figure(figsize=[5,5])
     h = [Size.Fixed(0), Size.Fixed(2)]
     v = [Size.Fixed(0), Size.Fixed(len(sliced)*.4)]
@@ -34,13 +35,14 @@ for source in ['GO:MF']:#,'GO:CC']:
     g = sns.scatterplot(x='FC',y='term_name',data=sliced,hue='negative_log10_of_adjusted_p_value',
                size='term_size',sizes=(150,800),palette='Reds',
                legend='brief',edgecolor='k',
-               hue_norm=(3,11),ax=ax)
+               hue_norm=(1,6),ax=ax)
     g.legend(bbox_to_anchor=(1.2,1))
-    ax.set_xlim(1,2)
+    ax.set_xlim(1,3)
     plt.savefig('GO_MF.svg')
+    ax.set_ylabel('')
 #%% 
 for source in ['GO:BP']:
-    sliced = compact[(compact['source']==source)&(compact['term_size']>500)&(compact['FC']>1.4)&(compact['term_name'].str.len()<35)]
+    sliced = compact[(compact['source']==source)&(compact['term_size']>50)&(compact['FC']>1.4)&(compact['term_name'].str.len()<35)]
     fig = plt.figure(figsize=[5,5])
     h = [Size.Fixed(0), Size.Fixed(2)]
     v = [Size.Fixed(0), Size.Fixed(len(sliced)*.4)]
